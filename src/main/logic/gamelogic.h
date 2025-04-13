@@ -42,6 +42,7 @@ typedef struct {
 
 typedef __SizedPoint SmallAsteroid;
 typedef __SizedPoint HealthKit;
+typedef __SizedPoint Blast;
 
 typedef struct LinkedList LinkedList;
 struct LinkedList {
