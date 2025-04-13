@@ -3,4 +3,6 @@ project(StarInvadersDemo C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(StarInvadersDemo main.c)
+include_directories(src/main)
+
+add_executable(StarInvadersDemo src/main/main.c)
