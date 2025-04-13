@@ -47,3 +47,19 @@ void move_entities_down(LinkedList *entities, const Screen *screen) {
         entities = entities->next;
     }
 }
+
+void move_blasts_up(LinkedList *blasts, const Screen *screen) {
+    register const float STEP = MOVEMENT.BLAST_MOVE_C * screen->height;
+    LinkedList *prev = nullptr;
+    while (blasts != nullptr) {
+        float new_position = blasts->entity->position.y + STEP;
+        if (new_position < screen->width) {
+            blasts->entity->position.y = new_position;
+        } else if (prev) {
+            prev->next = blasts->next;
+            blasts = prev;
+        }
+        prev = blasts;
+        blasts = blasts->next;
+    }
+}

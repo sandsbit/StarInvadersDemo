@@ -24,6 +24,7 @@ const struct {  // as % of screen height
     const float ASTEROID_SIZE = 0.06f;
     const float PLAYER_SIZE = 0.12f;
     const float SMALL_ASTEROID_SIZE = 0.03f;
+    const float BLAST_HEIGHT = 0.01f;
 } SIZE;
 
 #endif //SIZES_H
