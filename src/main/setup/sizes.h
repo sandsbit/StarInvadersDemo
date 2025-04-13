@@ -20,7 +20,7 @@
 #ifndef SIZES_H
 #define SIZES_H
 
-const struct {  // as % of screen height
+const struct {  // of screen height
     const float ASTEROID_SIZE = 0.06f;
     const float PLAYER_SIZE = 0.12f;
     const float SMALL_ASTEROID_SIZE = 0.03f;

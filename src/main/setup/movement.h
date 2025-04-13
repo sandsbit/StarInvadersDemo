@@ -21,9 +21,9 @@
 #define MOVEMENT_H
 
 const struct {
-    const float PLAYER_MOVE_C = 0.5f; // as % of screen width in 1/10 of a second
-    const float ENTITY_MOVE_C = 1.0f; // as % of screen height in 1/10 of a second
-    const float BLAST_MOVE_C = 5.0f; // as % of screen height in 1/10 of a second
+    const float PLAYER_MOVE_C = 0.005f; // of screen width in 1/10 of a second
+    const float ENTITY_MOVE_C = 0.01f; // of screen height in 1/10 of a second
+    const float BLAST_MOVE_C = 0.05f; // of screen height in 1/10 of a second
 } MOVEMENT;
 
 #endif //MOVEMENT_H
