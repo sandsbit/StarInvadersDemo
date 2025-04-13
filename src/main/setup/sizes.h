@@ -17,19 +17,13 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#ifndef SIZES_H
+#define SIZES_H
 
-typedef struct {
-    float x;
-    float y;
-} Point;
+const struct {  // as % of screen height
+    const float ASTEROID_SIZE = 0.06f;
+    const float PLAYER_SIZE = 0.12f;
+    const float SMALL_ASTEROID_SIZE = 0.03f;
+} SIZE;
 
-typedef struct {
-    int height;
-    int width;
-} Size;
-
-typedef Size Screen;
-
-#endif //STRUCTS_H
+#endif //SIZES_H

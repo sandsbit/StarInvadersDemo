@@ -24,16 +24,29 @@
 
 typedef struct {
     Point position;
-    int hp;
+    short hp;
     int score;
+    Size size;
 } Player;
 
 typedef struct {
     Point position;
     bool cracked;
+    Size size;
 } Asteroid;
 
-typedef Point SmallAsteroid;
-typedef Point HealthKit;
+typedef struct {
+    Point position;
+    Size size;
+} __SizedPoint;
+
+typedef __SizedPoint SmallAsteroid;
+typedef __SizedPoint HealthKit;
+
+typedef struct AsteroidLinkedList AsteroidLinkedList;
+struct AsteroidLinkedList {
+    Asteroid asteroid;
+    AsteroidLinkedList *next;
+};
 
 #endif //GAMELOGIC_H

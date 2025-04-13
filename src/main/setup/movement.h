@@ -17,19 +17,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef STRUCTS_H
-#define STRUCTS_H
+#ifndef MOVEMENT_H
+#define MOVEMENT_H
 
-typedef struct {
-    float x;
-    float y;
-} Point;
+const struct {
+    const float PLAYER_MOVE_C = 0.5f; // as % of screen width in 1/10 of a second
+    const float ENTITY_MOVE_C = 1.0f; // as % of screen height in 1/10 of a second
+} MOVEMENT;
 
-typedef struct {
-    int height;
-    int width;
-} Size;
-
-typedef Size Screen;
-
-#endif //STRUCTS_H
+#endif //MOVEMENT_H
