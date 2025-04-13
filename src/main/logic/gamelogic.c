@@ -63,3 +63,21 @@ void move_blasts_up(LinkedList *blasts, const Screen *screen) {
         blasts = blasts->next;
     }
 }
+
+inline bool two_rect_collide(__SizedPoint *rect1, __SizedPoint *rect2) {
+    if (rect1->position.x < rect2->position.x + rect2->size.width &&
+   rect1->position.x + rect1->size.width > rect2->size.width &&
+   rect1->position.y < rect2->position.y + rect2->size.height &&
+   rect1->position.y + rect1->size.height > rect2->position.y)
+        return true;
+    return false;
+}
+
+bool detect_user_entity_collision(Player *player, LinkedList *entities) {
+    while (entities != nullptr) {
+        if (two_rect_collide(player, entities->entity))
+            return true;
+        entities = entities->next;
+    }
+    return false;
+}
