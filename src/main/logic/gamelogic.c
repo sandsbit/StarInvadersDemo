@@ -32,18 +32,18 @@ inline void move_player_right(Player *player, const Screen *screen) {
     player->position.x = fminf(new_position, screen->width - player->size.width);
 }
 
-inline void move_asteroids_down(AsteroidLinkedList *asteroids, const Screen *screen) {
+inline void move_entities_down(LinkedList *entities, const Screen *screen) {
     register const float STEP = MOVEMENT.ENTITY_MOVE_C * screen->height;
-    AsteroidLinkedList *prev = nullptr;
-    while (asteroids != nullptr) {
-        float new_position = asteroids->asteroid.position.y + STEP;
-        if (new_position > asteroids->asteroid.size.height) {
-            asteroids->asteroid.position.y = new_position;
+    LinkedList *prev = nullptr;
+    while (entities != nullptr) {
+        float new_position = entities->entity->position.y + STEP;
+        if (new_position > entities->entity->size.height) {
+            entities->entity->position.y = new_position;
         } else if (prev) {
-            prev->next = asteroids->next;
-            asteroids = prev;
+            prev->next = entities->next;
+            entities = prev;
         }
-        prev = asteroids;
-        asteroids = asteroids->next;
+        prev = entities;
+        entities = entities->next;
     }
 }
