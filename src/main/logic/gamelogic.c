@@ -40,7 +40,7 @@ void move_entities_down(LinkedList *entities, const Screen *screen) {
         float new_position = entities->entity->position.y + STEP;
         if (new_position > entities->entity->size.height) {
             entities->entity->position.y = new_position;
-        } else if (prev) {
+        } else {
             prev->next = entities->next;
             entities = prev;
         }
@@ -57,7 +57,7 @@ void move_blasts_up(LinkedList *blasts, const Screen *screen) {
         float new_position = blasts->entity->position.y + STEP;
         if (new_position < screen->width) {
             blasts->entity->position.y = new_position;
-        } else if (prev) {
+        } else {
             prev->next = blasts->next;
             blasts = prev;
         }
