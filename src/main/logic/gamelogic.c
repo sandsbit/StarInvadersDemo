@@ -34,7 +34,8 @@ inline void move_player_right(Player *player, const Screen *screen) {
 
 void move_entities_down(LinkedList *entities, const Screen *screen) {
     register const float STEP = MOVEMENT.ENTITY_MOVE_C * screen->height;
-    LinkedList *prev = nullptr;
+    LinkedList *prev = entities;
+    entities = entities->next;
     while (entities != nullptr) {
         float new_position = entities->entity->position.y + STEP;
         if (new_position > entities->entity->size.height) {
@@ -50,7 +51,8 @@ void move_entities_down(LinkedList *entities, const Screen *screen) {
 
 void move_blasts_up(LinkedList *blasts, const Screen *screen) {
     register const float STEP = MOVEMENT.BLAST_MOVE_C * screen->height;
-    LinkedList *prev = nullptr;
+    LinkedList *prev = blasts;
+    blasts = blasts->next;
     while (blasts != nullptr) {
         float new_position = blasts->entity->position.y + STEP;
         if (new_position < screen->width) {
