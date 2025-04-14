@@ -83,3 +83,35 @@ bool detect_user_entity_collision(Player *player, LinkedList *entities) {
     }
     return false;
 }
+
+inline bool single_blast_entity_collision(Blast *blast, LinkedList *entities, bool is_small) {
+    LinkedList *prev = entities;
+    entities = entities->next;
+    while (entities != nullptr) {
+        if (two_rect_collide(blast, entities->entity)) {
+            Asteroid *entity = entities->entity;
+            if (is_small || entity->cracked) {
+                prev->next = entities->next;
+                return true;
+            } else {
+                entity->cracked = true;
+            }
+        }
+        prev = entities;
+        entities = entities->next;
+    }
+    return false;
+}
+
+void process_asteroid_blast_collision(LinkedList *blasts, LinkedList *entities, bool is_small = false) {
+    LinkedList *prev = blasts;
+    blasts = blasts->next;
+    while (blasts != nullptr) {
+        if (single_blast_entity_collision(blasts->entity, entities, is_small)) {
+            prev->next = blasts->next;
+            blasts = prev;
+        }
+        prev = blasts;
+        blasts = blasts->next;
+    }
+}
