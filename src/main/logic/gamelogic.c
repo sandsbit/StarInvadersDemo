@@ -32,6 +32,7 @@ inline void move_player_right(Player *player, const Screen *screen) {
     player->position.x = fminf(new_position, screen->width - player->size.width);
 }
 
+// TODO: Free when removing from linked list?
 void move_entities_down(LinkedList *entities, const Screen *screen) {
     register const float STEP = MOVEMENT.ENTITY_MOVE_C * screen->height;
     LinkedList *prev = entities;
