@@ -18,6 +18,7 @@
  */
 
 #include <math.h>
+#include <stdlib.h>
 
 #include "gamelogic.h"
 #include "setup/movement.h"
@@ -32,7 +33,6 @@ inline void move_player_right(Player *player, const Screen *screen) {
     player->position.x = fminf(new_position, screen->width - player->size.width);
 }
 
-// TODO: Free when removing from linked list?
 void move_entities_down(LinkedList *entities, const Screen *screen) {
     register const float STEP = MOVEMENT.ENTITY_MOVE_C * screen->height;
     LinkedList *prev = entities;
@@ -42,7 +42,9 @@ void move_entities_down(LinkedList *entities, const Screen *screen) {
         if (new_position > entities->entity->size.height) {
             entities->entity->position.y = new_position;
         } else {
+            free(entities->entity);
             prev->next = entities->next;
+            free(entities);
             entities = prev;
         }
         prev = entities;
@@ -59,7 +61,9 @@ void move_blasts_up(LinkedList *blasts, const Screen *screen) {
         if (new_position < screen->width) {
             blasts->entity->position.y = new_position;
         } else {
+            free(blasts->entity);
             prev->next = blasts->next;
+            free(blasts);
             blasts = prev;
         }
         prev = blasts;
@@ -78,10 +82,12 @@ inline bool two_rect_collide(__SizedPoint *rect1, __SizedPoint *rect2) {
 
 bool detect_user_entity_collision(Player *player, LinkedList *entities) {
     LinkedList *prev = entities;
+    entities = entities->next;  // first entity is always NULL
     while (entities != nullptr) {
         if (two_rect_collide(player, entities->entity)) {
+            free(entities->entity);
             prev->next = entities->next;
-            entities = prev;
+            free(entities);
             return true;
         }
         prev = entities;
@@ -97,7 +103,9 @@ inline bool single_blast_entity_collision(Blast *blast, LinkedList *entities, bo
         if (two_rect_collide(blast, entities->entity)) {
             Asteroid *entity = entities->entity;
             if (is_small || entity->cracked) {
+                free(entities->entity);
                 prev->next = entities->next;
+                free(entities);
                 return true;
             } else {
                 entity->cracked = true;
@@ -114,7 +122,9 @@ void process_asteroid_blast_collision(LinkedList *blasts, LinkedList *entities, 
     blasts = blasts->next;
     while (blasts != nullptr) {
         if (single_blast_entity_collision(blasts->entity, entities, is_small)) {
+            free(blasts->entity);
             prev->next = blasts->next;
+            free(blasts);
             blasts = prev;
         }
         prev = blasts;
