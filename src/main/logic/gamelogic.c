@@ -77,9 +77,14 @@ inline bool two_rect_collide(__SizedPoint *rect1, __SizedPoint *rect2) {
 }
 
 bool detect_user_entity_collision(Player *player, LinkedList *entities) {
+    LinkedList *prev = entities;
     while (entities != nullptr) {
-        if (two_rect_collide(player, entities->entity))
+        if (two_rect_collide(player, entities->entity)) {
+            prev->next = entities->next;
+            entities = prev;
             return true;
+        }
+        prev = entities;
         entities = entities->next;
     }
     return false;
