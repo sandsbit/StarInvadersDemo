@@ -23,20 +23,33 @@
 #include "gamelogic.h"
 #include "setup/movement.h"
 
+/**
+ * Moves player to the left [for if the LEFT_ARROW key is pressed].
+ */
 inline void move_player_left(Player *player, const Screen *screen) {
     register float new_position = player->position.x - MOVEMENT.PLAYER_MOVE_C * screen->width;
     player->position.x = fmaxf(new_position, 0.0f);
 }
 
+/**
+ * Moves player to the right [for if the RIGHT_ARROW key is pressed].
+ */
 inline void move_player_right(Player *player, const Screen *screen) {
     register float new_position = player->position.x + MOVEMENT.PLAYER_MOVE_C * screen->width;
     player->position.x = fminf(new_position, screen->width - player->size.width);
 }
 
+/**
+ * Moves entities down. Should be called 10 thimes a second.
+ *
+ * First element in the linked list must point to a NULL entity.
+ * Entities that are out of view are deleted using free, so they
+ * must be allocated with malloc (both LinkedList and LinkedList.entity).
+ */
 void move_entities_down(LinkedList *entities, const Screen *screen) {
     register const float STEP = MOVEMENT.ENTITY_MOVE_C * screen->height;
     LinkedList *prev = entities;
-    entities = entities->next;
+    entities = entities->next;  // first entity is always NULL
     while (entities != nullptr) {
         float new_position = entities->entity->position.y + STEP;
         if (new_position > entities->entity->size.height) {
@@ -52,10 +65,17 @@ void move_entities_down(LinkedList *entities, const Screen *screen) {
     }
 }
 
+/**
+ * Moves blasts up. Should be called 10 thimes a second.
+ *
+ * First element in the linked list must point to a NULL entity.
+ * Entities that are out of view are deleted using free, so they
+ * must be allocated with malloc (both LinkedList and LinkedList.entity).
+ */
 void move_blasts_up(LinkedList *blasts, const Screen *screen) {
     register const float STEP = MOVEMENT.BLAST_MOVE_C * screen->height;
     LinkedList *prev = blasts;
-    blasts = blasts->next;
+    blasts = blasts->next;  // first entity is always NULL
     while (blasts != nullptr) {
         float new_position = blasts->entity->position.y + STEP;
         if (new_position < screen->width) {
@@ -71,6 +91,9 @@ void move_blasts_up(LinkedList *blasts, const Screen *screen) {
     }
 }
 
+/**
+ * Checks if rect1 and rect2 collide.
+ */
 inline bool two_rect_collide(__SizedPoint *rect1, __SizedPoint *rect2) {
     if (rect1->position.x < rect2->position.x + rect2->size.width &&
    rect1->position.x + rect1->size.width > rect2->size.width &&
@@ -80,6 +103,17 @@ inline bool two_rect_collide(__SizedPoint *rect1, __SizedPoint *rect2) {
     return false;
 }
 
+/**
+ * Detects if user hit an entity and deletes that entity.
+ *
+ * Returns true if one collide was detected and false if no
+ * were detected. After first collide is detected, function
+ * is stopped.
+ *
+ * First element in the linked list must point to a NULL entity.
+ * Entities that are out of view are deleted using free, so they
+ * must be allocated with malloc (both LinkedList and LinkedList.entity).
+ */
 bool detect_user_entity_collision(Player *player, LinkedList *entities) {
     LinkedList *prev = entities;
     entities = entities->next;  // first entity is always NULL
@@ -96,9 +130,23 @@ bool detect_user_entity_collision(Player *player, LinkedList *entities) {
     return false;
 }
 
-inline bool single_blast_entity_collision(Blast *blast, LinkedList *entities, bool is_small) {
+/**
+ * Detects if blast hit an asteroid.
+ *
+ * Entity is deleted if is_small = true or Asteroid.cracked
+ * is true. Otherwise cracked is set to true.
+ *
+ * Returns true if one collide was detected and false if no
+ * were detected. After first collide is detected, function
+ * is stopped.
+ *
+ * First element in the linked list must point to a NULL entity.
+ * Entities that are out of view are deleted using free, so they
+ * must be allocated with malloc (both LinkedList and LinkedList.entity).
+ */
+bool single_blast_entity_collision(Blast *blast, LinkedList *entities, bool is_small) {
     LinkedList *prev = entities;
-    entities = entities->next;
+    entities = entities->next;  // first entity is always NULL
     while (entities != nullptr) {
         if (two_rect_collide(blast, entities->entity)) {
             Asteroid *entity = entities->entity;
@@ -117,9 +165,20 @@ inline bool single_blast_entity_collision(Blast *blast, LinkedList *entities, bo
     return false;
 }
 
+/**
+ * Detects if any blast hit an asteroid and deletes that blast.
+ *
+ * Entity is deleted if is_small = true or Asteroid.cracked
+ * is true. Otherwise cracked is set to true.
+ * See docs for single_blast_entity_collision().
+ *
+ * First element in the linked list must point to a NULL entity.
+ * Entities that are out of view are deleted using free, so they
+ * must be allocated with malloc (both LinkedList and LinkedList.entity).
+ */
 void process_asteroid_blast_collision(LinkedList *blasts, LinkedList *entities, bool is_small = false) {
     LinkedList *prev = blasts;
-    blasts = blasts->next;
+    blasts = blasts->next;  // first entity is always NULL
     while (blasts != nullptr) {
         if (single_blast_entity_collision(blasts->entity, entities, is_small)) {
             free(blasts->entity);
