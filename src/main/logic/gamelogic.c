@@ -22,6 +22,7 @@
 
 #include "gamelogic.h"
 #include "setup/movement.h"
+#include "setup/logic.h"
 
 /**
  * Moves player to the left [for if the LEFT_ARROW key is pressed].
@@ -189,4 +190,33 @@ void process_asteroid_blast_collision(LinkedList *blasts, LinkedList *entities, 
         prev = blasts;
         blasts = blasts->next;
     }
+}
+
+// see docs in gamelogic.h
+bool game_loop(GameObjects *objects, bool LEFT_ARROW, bool RIGHT_ARROW) {
+    // -- MOVEMENT --
+    if (LEFT_ARROW)
+        move_player_left(objects->player, objects->screen);
+    if (RIGHT_ARROW)
+        move_player_right(objects->player, objects->screen);
+
+    move_entities_down(objects->asteroids, objects->screen);
+    move_entities_down(objects->small_asteroids, objects->screen);
+    move_entities_down(objects->health_kits, objects->screen);
+
+    // -- COLLISIONS --
+    process_asteroid_blast_collision(objects->blasts, objects->asteroids);
+    process_asteroid_blast_collision(objects->blasts, objects->small_asteroids, true);
+
+    if (detect_user_entity_collision(objects->player, objects->asteroids))
+        objects->player->hp -= LOGIC.HIT_ASTEROID_HP;
+    if (detect_user_entity_collision(objects->player, objects->small_asteroids))
+        objects->player->hp -= LOGIC.HIT_SMALL_ASTEROID_HP;
+    if (detect_user_entity_collision(objects->player, objects->health_kits))
+        objects->player->hp += LOGIC.HIT_HEALTH_KIT_HP;
+
+    // -- LOST OR NOT --
+    if (objects->player->hp <= 0)
+        return GAME_LOOP_DEAD;
+    return GAME_LOOP_ALIVE;
 }

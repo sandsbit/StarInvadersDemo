@@ -10,12 +10,14 @@ add_library(StarInvadersLogic STATIC
         src/main/logic/gamelogic.h
         src/main/utils/structs.h
         src/main/setup/movement.h
-        src/main/setup/sizes.h)
+        src/main/setup/sizes.h
+        src/main/setup/logic.h)
 
 add_executable(StarInvadersDemo src/main/main.c
         src/main/logic/gamelogic.c
         src/main/logic/gamelogic.h
         src/main/utils/structs.h
         src/main/setup/movement.h
-        src/main/setup/sizes.h)
+        src/main/setup/sizes.h
+        src/main/setup/logic.h)
 target_link_libraries(StarInvadersDemo StarInvadersLogic)

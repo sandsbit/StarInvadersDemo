@@ -50,4 +50,26 @@ struct LinkedList {
     LinkedList *next;
 };
 
+typedef struct {
+    Player *player;
+    LinkedList *asteroids;
+    LinkedList *small_asteroids;
+    LinkedList *blasts;
+    LinkedList *health_kits;
+    Screen *screen;
+} GameObjects;
+
+#define GAME_LOOP_ALIVE true
+#define GAME_LOOP_DEAD false
+
+/**
+ * Implements game logic. Should be called every 1/10 of a second.
+ *
+ * @param objects structure with pointers to all game objects.
+ * @param LEFT_ARROW true if left arrow key is pressed, false otherwise.
+ * @param RIGHT_ARROW true if right arrow key is pressed, false otherwise.
+ * @return GAME_LOOP_ALIVE if game goes on, GAME_LOOP_DEAD if player has lost.
+ */
+[[nodiscard]] bool game_loop(GameObjects *objects, bool LEFT_ARROW, bool RIGHT_ARROW);
+
 #endif //GAMELOGIC_H
